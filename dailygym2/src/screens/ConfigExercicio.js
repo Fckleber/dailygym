@@ -32,12 +32,12 @@ export default function ConfigExercicio({ route, navigation }) {
   
   const [exercicioAtual, setExercicioAtual] = useState(exercicios[0]);
   const [numeroDeSeries, setNumeroDeSeries] = useState(3);
-  const [descanso, setDescanso] = useState(5);
+  const [descanso, setDescanso] = useState(10);
   const [series, setSeries] = useState([]);
 
   useEffect(() => {
     setSeries(
-      Array.from({ length: numeroDeSeries }, () => ({ reps: '0', carga: '0.0' }))
+      Array.from({ length: numeroDeSeries }, () => ({ reps: '0', carga: '0.0', tempo: '15' }))
     );
   }, [numeroDeSeries]);
 
@@ -55,7 +55,7 @@ export default function ConfigExercicio({ route, navigation }) {
       detalhes: {
         numeroDeSeries: numeroDeSeries,
         descanso: descanso,
-        series: series,
+        series: series, 
       },
     };
 
@@ -82,9 +82,6 @@ export default function ConfigExercicio({ route, navigation }) {
           <Image source={{ uri: exercicioAtual.imagem_url }} style={styles.exercicioImage} />
           <View>
             <Text style={styles.exercicioTitle}>{exercicioAtual.nome}</Text>
-            <TouchableOpacity>
-              <Text style={styles.verMais}>Ver mais</Text>
-            </TouchableOpacity>
           </View>
         </View>
 
@@ -107,6 +104,7 @@ export default function ConfigExercicio({ route, navigation }) {
           {series.map((serie, index) => (
             <View key={index} style={styles.serieRow}>
               <Text style={styles.serieIndex}>{index + 1}ª</Text>
+              
               <Text style={styles.inputLabel}>Rep:</Text>
               <TextInput
                 style={styles.input}
@@ -114,6 +112,17 @@ export default function ConfigExercicio({ route, navigation }) {
                 value={serie.reps}
                 onChangeText={(val) => handleSerieChange(index, 'reps', val)}
               />
+              
+              {/* PASSO 2: Adicionar o campo de texto para o tempo */}
+              <Text style={styles.inputLabel}>Tempo:</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="number-pad"
+                value={serie.tempo}
+                onChangeText={(val) => handleSerieChange(index, 'tempo', val)}
+              />
+              <Text style={styles.inputLabel}>s</Text>
+
               <Text style={styles.inputLabel}>Carga:</Text>
               <TextInput
                 style={styles.input}
@@ -137,7 +146,8 @@ export default function ConfigExercicio({ route, navigation }) {
     </SafeAreaView>
   );
 }
-// Estilos...
+
+
 const styles = StyleSheet.create({
     container: {
     flex: 1,
@@ -174,7 +184,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  
   configContainer: {
     paddingHorizontal: 20,
     paddingBottom: 40,
@@ -221,23 +230,25 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
+    justifyContent: 'space-between',
   },
   serieIndex: {
     color: '#FFF',
     fontSize: 16,
-    marginRight: 15,
+    marginRight: 10, 
   },
   inputLabel: {
     color: '#AAA',
     fontSize: 16,
-    marginRight: 5,
+    marginHorizontal: 4, 
   },
   input: {
     color: '#FFF',
     backgroundColor: '#333',
     borderRadius: 5,
-    padding: 10,
-    minWidth: 50,
+    paddingHorizontal: 8, 
+    paddingVertical: 10,
+    minWidth: 40, 
     textAlign: 'center',
   },
   obsInput: {
