@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  FlatList, 
-  TouchableOpacity, 
-  Image, 
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Image,
   TextInput,
   ActivityIndicator,
   SafeAreaView
 } from 'react-native';
-import { supabase } from '../supabase'; // Importe seu cliente Supabase
-import Icon from 'react-native-vector-icons/FontAwesome'; // Ícone de busca
+import { supabase } from '../supabase';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-// Componente para cada item da lista de exercícios
+const NOME_DA_COLUNA_NOME = 'nome';
+const NOME_DA_COLUNA_GRUPO_MUSCULAR = 'grupo_muscular';
+const NOME_DA_COLUNA_IMAGEM = 'imagem_url';
+
 const ExercicioItem = ({ item, onPress, isSelected }) => (
   <TouchableOpacity onPress={onPress} style={styles.itemContainer}>
-    <Image source={{ uri: item.imagem_url }} style={styles.itemImage} />
+    <Image
+      source={{ uri: item[NOME_DA_COLUNA_IMAGEM] }}
+      style={styles.itemImage}
+      defaultSource={require('../../assets/dumbbells.png')}
+    />
     <View style={styles.itemTextContainer}>
-      <Text style={styles.itemTitle}>{item.nome}</Text>
-      <Text style={styles.itemSubtitle}>{item.grupo_muscular}</Text>
+      <Text style={styles.itemTitle}>{item[NOME_DA_COLUNA_NOME] || 'Exercício sem nome'}</Text>
+      <Text style={styles.itemSubtitle}>{item[NOME_DA_COLUNA_GRUPO_MUSCULAR] || 'Sem grupo muscular'}</Text>
     </View>
     <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
       {isSelected && <Icon name="check" size={14} color="#FFF" />}
@@ -27,28 +34,19 @@ const ExercicioItem = ({ item, onPress, isSelected }) => (
   </TouchableOpacity>
 );
 
-export default function SelecionarExercicio({ navigation }) {
+
+export default function SelecionarExercicio({ route, navigation }) {
+  
+  const { nomeDoTreino } = route.params;
+
   const [exercicios, setExercicios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedExercicios, setSelectedExercicios] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const handleAdicionarExercicios = () => {
-        if (selectedExercicios.length > 0) {
-            // Navega para a nova tela, passando os exercícios selecionados como parâmetro
-            navigation.navigate('ConfigExercicio', {
-                exercicios: selectedExercicios,
-            });
-        } else {
-            // Opcional: Alerta para o usuário selecionar pelo menos um exercício
-            alert('Por favor, selecione pelo menos um exercício.');
-        }
-    };
-  // Função para buscar os exercícios no Supabase
+
   useEffect(() => {
     const fetchExercicios = async () => {
-      // O nome da tabela é 'exercicios', conforme você informou
       const { data, error } = await supabase.from('exercicios').select('*');
-      
       if (error) {
         console.error('Erro ao buscar exercícios:', error);
       } else {
@@ -56,11 +54,9 @@ export default function SelecionarExercicio({ navigation }) {
       }
       setLoading(false);
     };
-
     fetchExercicios();
   }, []);
 
-  // Função para selecionar/desselecionar um exercício
   const toggleSelection = (exercicio) => {
     setSelectedExercicios((prevSelected) => {
       const isSelected = prevSelected.find((e) => e.id === exercicio.id);
@@ -72,10 +68,25 @@ export default function SelecionarExercicio({ navigation }) {
     });
   };
 
-  // Filtra os exercícios com base na busca
-  const filteredExercicios = exercicios.filter((exercicio) =>
-    exercicio.nome.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleAdicionarExercicios = () => {
+    if (selectedExercicios.length > 0) {
+      
+      navigation.navigate('ConfigExercicio', {
+        exercicios: selectedExercicios,
+        nomeDoTreino: nomeDoTreino,
+      });
+    } else {
+      alert('Por favor, selecione pelo menos um exercício.');
+    }
+  };
+
+  const filteredExercicios = exercicios.filter((exercicio) => {
+    const nomeDoExercicio = exercicio[NOME_DA_COLUNA_NOME];
+    if (typeof nomeDoExercicio === 'string') {
+      return nomeDoExercicio.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    return false;
+  });
 
   if (loading) {
     return (
@@ -94,7 +105,6 @@ export default function SelecionarExercicio({ navigation }) {
         </TouchableOpacity>
       </View>
       
-      {/* Barra de Busca */}
       <View style={styles.searchContainer}>
         <Icon name="search" size={20} color="#777" style={styles.searchIcon} />
         <TextInput
@@ -119,17 +129,17 @@ export default function SelecionarExercicio({ navigation }) {
         contentContainerStyle={{ paddingBottom: 100 }}
       />
       
-      {/* Botão de Adicionar no rodapé */}
+
       <TouchableOpacity style={styles.addButton} onPress={handleAdicionarExercicios}>
-          <Text style={styles.addButtonText}>
-            ADICIONAR ({selectedExercicios.length})
-          </Text>
+        <Text style={styles.addButtonText}>
+          ADICIONAR ({selectedExercicios.length})
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
-// --- ESTILOS ---
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -186,6 +196,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 8,
     marginRight: 15,
+    backgroundColor: '#333'
   },
   itemTextContainer: {
     flex: 1,

@@ -4,23 +4,40 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, Imag
 const DAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
 
 export default function AddTreino({ navigation }) {
-  const [nomeTreino, setNomeTreino] = useState('');
+  const [nomeTreino, setNomeTreino] = useState(''); //
   const [selectedDays, setSelectedDays] = useState([]);
 
-  // Função para adicionar ou remover um dia da lista de selecionados
+  
   const toggleDaySelection = (day) => {
     setSelectedDays((prevDays) =>
       prevDays.includes(day)
-        ? prevDays.filter((d) => d !== day) // Remove o dia se já estiver selecionado
-        : [...prevDays, day] // Adiciona o dia se não estiver selecionado
+        ? prevDays.filter((d) => d !== day) 
+        : [...prevDays, day] 
     );
+  }
+  const handleNavegarParaSelecionar = () => {
+   
+    if (nomeTreino.trim() === '') {
+        alert('Por favor, dê um nome ao seu treino.');
+        return;
+    }
+   
+    navigation.navigate('SelecionarExercicio', { nomeDoTreino: nomeTreino });
   };
+  const handleProsseguir = () => {
+    if (nomeTreino.trim() === '') {
+      alert('Por favor, dê um nome ao seu treino.');
+      return;
+    }
+    
+    navigation.navigate('SelecionarExercicio', { nomeDoTreino: nomeTreino });
+  };
+
 
   return (
     <SafeAreaView style={styles.background}>
       <View style={styles.container}>
         <View style={styles.header}>
-            {/* Você precisará de um ícone aqui. Troque o require por sua imagem. */}
             <Image source={require('../../assets/clipboard-icon.png')} style={styles.headerIcon}/>
         </View>
         <View style={styles.form}>
@@ -63,10 +80,8 @@ export default function AddTreino({ navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={styles.footerButtonText}>CANCELAR</Text>
           </TouchableOpacity>
-          <View style={styles.divider} />
-          {/* AQUI ESTÁ A MUDANÇA */}
-          {/* Certifique-se de que 'SelecionarExercicio' é o mesmo nome usado no App.js */}
-          <TouchableOpacity onPress={() => navigation.navigate('SelecionarExercicio')}>
+          <View style={styles.divider} />      
+           <TouchableOpacity onPress={handleProsseguir}>
             <Text style={styles.footerButtonText}>ADICIONAR</Text>
           </TouchableOpacity>
         </View>
