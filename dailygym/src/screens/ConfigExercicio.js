@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  ScrollView,
-} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, TextInput, ScrollView, } from 'react-native';
 
 const NumericInput = ({ value, setValue, step = 1, suffix = '' }) => {
     const increment = () => setValue(prev => prev + step);
     const decrement = () => setValue(prev => (prev > step ? prev - step : prev));
   
     return (
-      <View style={styles.numericInputContainer}>
+      <View style={styles.numericZInputContainer}>
         <TouchableOpacity onPress={decrement} style={styles.numericButton}>
           <Text style={styles.numericButtonText}>-</Text>
         </TouchableOpacity>
@@ -202,14 +193,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 10,
   },
-  numericInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#1C1C1E',
-    borderRadius: 8,
-    padding: 5,
-    justifyContent: 'space-between',
-  },
+
   numericButton: {
     padding: 10,
   },

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'r
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Audio } from 'expo-av';
 
-const PREPARATION_TIME = 15;
+const Tempo_preparacao = 15;
 
 export default function ExeTreino({ route, navigation }) {
     const { exercicios, nomeDoTreino } = route.params;
@@ -11,7 +11,7 @@ export default function ExeTreino({ route, navigation }) {
     const [estado, setEstado] = useState('preparacao');
     const [indiceExercicio, setIndiceExercicio] = useState(0);
     const [indiceSerie, setIndiceSerie] = useState(0);
-    const [tempo, setTempo] = useState(PREPARATION_TIME);
+    const [tempo, setTempo] = useState(Tempo_preparacao);
 
     const [beepSound, setBeepSound] = useState();
     const [finalBeepSound, setFinalBeepSound] = useState();
@@ -57,7 +57,7 @@ export default function ExeTreino({ route, navigation }) {
                     setTempo(exercicioAtual.detalhes.descanso);
                 } else {
                     setEstado('preparacao');
-                    setTempo(PREPARATION_TIME);
+                    setTempo(Tempo_preparacao);
                 }
                 break;
             case 'descanso':
@@ -132,7 +132,7 @@ export default function ExeTreino({ route, navigation }) {
     const handleProximoExercicio = () => {
         setIndiceExercicio(i => i + 1);
         setIndiceSerie(0);
-        setTempo(PREPARATION_TIME);
+        setTempo(Tempo_preparacao);
         setEstado('preparacao');
     }
 

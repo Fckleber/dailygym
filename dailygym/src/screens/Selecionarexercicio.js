@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  ActivityIndicator,
-  SafeAreaView
-} from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, TextInput,ActivityIndicator, SafeAreaView } from 'react-native';
 import { supabase } from '../supabase';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -80,7 +70,7 @@ export default function SelecionarExercicio({ route, navigation }) {
     }
   };
 
-  const filteredExercicios = exercicios.filter((exercicio) => {
+  const filtaredExercicios = exercicios.filter((exercicio) => {
     const nomeDoExercicio = exercicio[NOME_DA_COLUNA_NOME];
     if (typeof nomeDoExercicio === 'string') {
       return nomeDoExercicio.toLowerCase().includes(searchQuery.toLowerCase());
@@ -117,7 +107,7 @@ export default function SelecionarExercicio({ route, navigation }) {
       </View>
 
       <FlatList
-        data={filteredExercicios}
+        data={filtaredExercicios}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <ExercicioItem
