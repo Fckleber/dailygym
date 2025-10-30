@@ -38,7 +38,7 @@ export default function CadastroScreen({ navigation }) {
       } else if (signUpError.code === 'auth/weak-password') {
         setError('A senha é muito fraca. Use pelo menos 6 caracteres.');
       } else {
-        setError('Ocorreu um erro ao tentar criar a conta.');
+        setError('Ocorreu um erro ao tentar criar a conta. Use pelo menos 6 caracteres na senha');
       }
     } else {
       navigation.navigate('Login');

@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 
-const DAYS = [ 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'];
+
 
 export default function AddTreino({ navigation }) {
   const [nomeTreino, setNomeTreino] = useState(''); //
-  const [selectedDays, setSelectedDays] = useState([]);
+  
 
   
-  const toggleDaySelection = (day) => {
-    setSelectedDays((prevDays) =>
-      prevDays.includes(day)
-        ? prevDays.filter((d) => d !== day) 
-        : [...prevDays, day] 
-    );
-  }
+ 
   const handleNavegarParaSelecionar = () => {
    
     if (nomeTreino.trim() === '') {
@@ -52,28 +46,7 @@ export default function AddTreino({ navigation }) {
             onChangeText={setNomeTreino}
           />
 
-          <Text style={styles.label}>Dia(s) deste Treino</Text>
-          <View style={styles.daysContainer}>
-            {DAYS.map((day) => (
-              <TouchableOpacity
-                key={day}
-                style={[
-                  styles.dayBox,
-                  selectedDays.includes(day) && styles.dayBoxSelected,
-                ]}
-                onPress={() => toggleDaySelection(day)}
-              >
-                <Text
-                  style={[
-                    styles.dayText,
-                    selectedDays.includes(day) && styles.dayTextSelected,
-                  ]}
-                >
-                  {day}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          
         </View>
 
         <View style={styles.footer}>
@@ -138,29 +111,6 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     marginBottom: 20,
-  },
-  daysContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  dayBox: {
-    width: 40,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#F9A825',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dayBoxSelected: {
-    backgroundColor: '#F9A825',
-  },
-  dayText: {
-    color: '#F9A825',
-  },
-  dayTextSelected: {
-    color: '#1C1C1E',
-    fontWeight: 'bold'
   },
   footer: {
     flexDirection: 'row',
